@@ -11,7 +11,7 @@ CFLAGS += $(DFLAGS)
 endif
 
 zvec_src = $(wildcard zvec/*.c)
-test_src = $(wildcard test/*.c) $(wildcard test/zvec/*.c)
+test_src = $(wildcard test/*.c) $(wildcard test/*/*.c)
 src = $(zvec_src) $(test_src)
 
 zvec_obj = $(zvec_src:.c=.o)

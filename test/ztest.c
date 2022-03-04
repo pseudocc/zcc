@@ -17,7 +17,7 @@ ms_t diff_ms(struct timeval tv1, struct timeval tv2) {
 char zerrbuf[ERR_BUF_SIZE];
 char* last_assert;
 
-sigjmp_buf point;
+jmp_buf point;
 static void segfault_handler(int sig, siginfo_t* si, void* vp) {
   longjmp(point, 1);
 }

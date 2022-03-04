@@ -7,7 +7,7 @@ void* __zvec_emplace(zvec_h* this, void* it, size_t bytes) {
 
   if (allocated <= used) {
     do 
-      allocated = allocated > 2 ? (allocated >> 1) : 1;
+      allocated += allocated > 2 ? (allocated >> 1) : 1;
     while (allocated <= used);
     __zvec_grow(this, allocated);
   }

@@ -146,7 +146,7 @@ struct zvec_header {
     __zvec_alloc_type(this) p;                  \
     p = __zvec_emplace((zvec_h*)this,           \
       it, sizeof(*(it)));                       \
-    if (ctor != NULL && p != NULL)              \
+    if (ctor && p)                              \
       ctor(p, __VA_ARGS__);                     \
     p;                                          \
   })
@@ -181,7 +181,7 @@ struct zvec_header {
     it = __zvec_emplace((zvec_h*)this,  \
       __zvec_end(this), sizeof(*it));   \
     *it = v;                            \
-  } while(0)
+  } while (0)
 
 #define zvec_emplace_back(this, ctor, ...)      \
   zvec_emplace(this, __zvec_end(this),          \
