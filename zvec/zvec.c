@@ -1,7 +1,7 @@
 #include "./zvec.h"
 
 zvec_h* __zvec_new(void) {
-  return calloc(zvec_h);
+  return calloc(sizeof(zvec_h), 1);
 }
 
 void __zvec_free(zvec_h* this) {

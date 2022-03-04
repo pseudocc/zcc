@@ -55,10 +55,10 @@ int swap();
  * declare UT
 **/
 
-ztes_case cases[] = {
+ztest_case __zvec_test_cases[] = {
   { "BE HAPPY EVERYDAY", &feels_good_man }
 };
 
-ztest_unit = DECL_UT(cases, ZVEC_UTNAME);
+ztest_unit zvec_tests = DECL_UT(__zvec_test_cases, ZVEC_UTNAME);
 
 #endif
