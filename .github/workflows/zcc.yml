@@ -1,0 +1,21 @@
+name: ZCC CI
+
+on:
+  push:
+    branches: [ aloof ]
+  pull_request:
+    branches: [ aloof ]
+  schedule:
+    - cron: '29 11 * * 4'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: make
+      run: make
+    - name: ztest
+      run: ./ztest
