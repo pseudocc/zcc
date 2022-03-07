@@ -13,6 +13,7 @@ void* __zvec_emplace(zvec_h* this, void* it, size_t bytes) {
   }
 
   it = this->begin + it_bias;
+  this->end = this->begin + used;
   memmove(it + bytes, it, used - it_bias);
 
   return it;

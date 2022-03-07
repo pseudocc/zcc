@@ -104,6 +104,7 @@ int main(int argc, const char* argv[]) {
     ? (unsigned int)atol(argv[1])
     : (unsigned int)time(NULL);
   srand(zseed);
+  printf("random seed: %u\n", zseed);
 
   for (failed = 0, i = 0; i < ARRAY_SIZE(cats); i++)
     failed += run_ut(cats[i]);

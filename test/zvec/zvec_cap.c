@@ -18,8 +18,7 @@ int size() {
     count += zrand_int(1, 5);
     for (; j < count; j++)
       zvec_push_back(vec, 11);
-    zassert_eq((int)zvec_size(vec), count,
-      "loop %d: random seed %u", "%d", i, zseed);
+    zassert_eq((int)zvec_size(vec), count, "loop %d", "%d", i);
   }
 
   zvec_free(vec);
@@ -73,7 +72,6 @@ int shrink_to_fit() {
   zvec_t(int) vec = zvec_new(int);
   int items, i;
 
-  zassert(1, "new");
   zvec_shrink_to_fit(vec);
   zassert(1, "empty");
 
@@ -82,8 +80,8 @@ int shrink_to_fit() {
     zvec_push_back(vec, 7);
 
   zvec_shrink_to_fit(vec);
-  zassert_eq((int)zvec_capacity(vec), (int)zvec_size(vec),
-    "vec[%d] - random seed %u", "%d", items, zseed);
+  zassert_eq((int)zvec_capacity(vec),
+    (int)zvec_size(vec), "vec[%d]", "%d", items);
 
   zvec_free(vec);
   return ZTEST_SUCCESS;

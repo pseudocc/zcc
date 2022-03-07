@@ -8,6 +8,9 @@ void __zvec_grow(zvec_h* this, size_t bytes) {
 }
 
 void __zvec_shrink(zvec_h* this, size_t bytes) {
+  if (this->begin == NULL)
+    return;
+
   this->begin = realloc(this->begin, bytes);
   this->alloc_end = this->begin + bytes;
 }

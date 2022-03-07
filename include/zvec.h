@@ -36,8 +36,9 @@ struct zvec_header {
  * capacity
 **/
 
-#define __zvec_size(this)       \
-  (__zvec_end(this) - __zvec_begin(this))
+#define __zvec_size(this)                               \
+  ((__zvec_alloc_type(this))__zvec_end(this)            \
+    - (__zvec_alloc_type(this))__zvec_begin(this))
 #define zvec_size(this)         \
   (this ? __zvec_size(this) : (size_t)0)
 
@@ -66,8 +67,8 @@ struct zvec_header {
 
 #define zvec_reserve(this, n)                           \
   do {                                                  \
-    if ((n) > __zvec_size(*this))                       \
-      __zvec_grow((zvec_h*)this, (n) * sizeof(this[0]));\
+    if ((n) > zvec_capacity(this))                      \
+      __zvec_grow((zvec_h*)this, (n) * sizeof(**this)); \
   } while (0)
 
 #define zvec_shrink_to_fit(this)                        \
