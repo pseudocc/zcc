@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <time.h>
 #include <sys/time.h>
 #include <string.h>
 #include <setjmp.h>
@@ -7,7 +8,7 @@
 
 typedef long long ms_t;
 
-ms_t diff_ms(struct timeval tv1, struct timeval tv2) {
+static ms_t diff_ms(struct timeval tv1, struct timeval tv2) {
   ms_t sec, usec;
   sec = tv2.tv_sec - tv1.tv_sec;
   usec = tv2.tv_usec - tv1.tv_usec;
@@ -68,13 +69,25 @@ static int run_ut(ztest_unit unit) {
       printf("%s", zerrbuf);
   }
 
-  printf("\t%d/%d of the tests are passed.\n", success, unit.n_cases);
+  printf("\t%d/%d of the tests are passed.\n",
+    success, unit.n_cases);
   printf("Total time elasped %lld ms.\n", diff_ms(tv0, tv2));
 
   return unit.n_cases - success;
 }
 
-int main() {
+static int feels_good_man() {
+  return ZTEST_SUCCESS;
+}
+
+unsigned zseed;
+static zrand_int(int min, int max) {
+  int v = rand();
+  int l = max - min;
+  return v % l + min;
+}
+
+int main(int argc, const char* argv[]) {
   // all test categories to be included in the unit tests
   ztest_unit cats[] = { zvec_tests };
   struct sigaction sact;
@@ -87,12 +100,13 @@ int main() {
 
   sigaction(SIGSEGV, &sact, NULL);
 
+  zseed = argc > 1
+    ? (unsigned)atol(argv[1])
+    : (unsigned)time(NULL);
+  srand(zseed);
+
   for (failed = 0, i = 0; i < ARRAY_SIZE(cats); i++)
     failed += run_ut(cats[i]);
   return failed != 0; 
-}
-
-int feels_good_man() {
-  return ZTEST_SUCCESS;
 }
 
