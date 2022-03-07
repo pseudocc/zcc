@@ -58,7 +58,12 @@ int swap();
 ztest_case __zvec_test_cases[] = {
   { "BE HAPPY EVERYDAY", &feels_good_man },
   { "CONSTRUCTOR", &ctor },
-  { "DESTRUCTOR", &dtor }
+  { "DESTRUCTOR", &dtor },
+  { "EMPTY", &empty },
+  { "SIZE", &size },
+  { "RESERVE", &reserve },
+  { "CAPACITY", &capacity },
+  { "SHRINK TO FIT", &shrink_to_fit }
 };
 
 ztest_unit zvec_tests = DECL_UT(__zvec_test_cases, ZVEC_UTNAME);
