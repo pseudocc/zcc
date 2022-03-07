@@ -76,12 +76,12 @@ static int run_ut(ztest_unit unit) {
   return unit.n_cases - success;
 }
 
-static int feels_good_man() {
+int feels_good_man() {
   return ZTEST_SUCCESS;
 }
 
-unsigned zseed;
-static zrand_int(int min, int max) {
+unsigned int zseed;
+int zrand_int(int min, int max) {
   int v = rand();
   int l = max - min;
   return v % l + min;
@@ -101,8 +101,8 @@ int main(int argc, const char* argv[]) {
   sigaction(SIGSEGV, &sact, NULL);
 
   zseed = argc > 1
-    ? (unsigned)atol(argv[1])
-    : (unsigned)time(NULL);
+    ? (unsigned int)atol(argv[1])
+    : (unsigned int)time(NULL);
   srand(zseed);
 
   for (failed = 0, i = 0; i < ARRAY_SIZE(cats); i++)

@@ -1,14 +1,14 @@
 #include "../zvec.h"
 
-static int empty() {
+int empty() {
   zvec_t(int) vec = zvec_new(int);
-  zassert(zvec_empty(vec), "newly created vec should be empty");
+  zassert(zvec_empty(vec), "new");
 
   zvec_free(vec);
   return ZTEST_SUCCESS;
 }
 
-static int size() {
+int size() {
   const int loops = 7;
   zvec_t(int) vec = zvec_new(int);
   int count, i, j;
@@ -18,16 +18,16 @@ static int size() {
     count += zrand_int(1, 5);
     for (; j < count; j++)
       zvec_push_back(vec, 11);
-    zassert_eq(zvec_size(vec), count,
-      "loop %d: random seed %d", "%d", i, zseed);
+    zassert_eq((int)zvec_size(vec), count,
+      "loop %d: random seed %u", "%d", i, zseed);
   }
 
   zvec_free(vec);
   return ZTEST_SUCCESS;
 }
 
-static int reserve() {
-  size_t cap;
+int reserve() {
+  int cap;
   zvec_t(int) vec = zvec_new(int);
 
   cap = 11;
@@ -36,8 +36,8 @@ static int reserve() {
   cap = zvec_capacity(vec);
 
   zvec_reserve(vec, 7);
-  zassert_eq(zvec_capacity(vec), cap,
-    "smaller than capacity", "%ld");
+  zassert_eq((int)zvec_capacity(vec), cap,
+    "smaller than capacity", "%d");
 
   cap += 2;
   zvec_reserve(vec, cap);
@@ -54,21 +54,22 @@ static int reserve() {
   return ZTEST_SUCCESS;
 }
 
-static int capacity() {
+int capacity() {
   zvec_t(int) vec = zvec_new(int);
   zvec_h* zh = (zvec_h*)vec;
+  int cap;
 
-  zassert_eq(zvec_capacity(vec), 0, "brand-new");
+  zassert_eq((int)zvec_capacity(vec), 0, "brand-new", "%d");
 
   zvec_push_back(vec, 11);
-  zassert_eq(zvec_capacity(vec),
-    (zh->alloc_end - zh->begin) / sizeof(int), "1 item");
+  cap = (zh->alloc_end - zh->begin) / sizeof(int);
+  zassert_eq((int)zvec_capacity(vec), cap, "1 item", "%d");
 
   zvec_free(vec);
   return ZTEST_SUCCESS;
 }
 
-static int shrink_to_fit() {
+int shrink_to_fit() {
   zvec_t(int) vec = zvec_new(int);
   int items, i;
 
@@ -81,8 +82,8 @@ static int shrink_to_fit() {
     zvec_push_back(vec, 7);
 
   zvec_shrink_to_fit(vec);
-  zassert_eq(zvec_capacity(zvec), zvec_size(zvec),
-    "vec[%d] - random seed %d", "%d", items, zseed);
+  zassert_eq((int)zvec_capacity(vec), (int)zvec_size(vec),
+    "vec[%d] - random seed %u", "%d", items, zseed);
 
   zvec_free(vec);
   return ZTEST_SUCCESS;

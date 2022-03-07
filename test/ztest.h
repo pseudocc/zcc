@@ -56,7 +56,7 @@ extern char zerrbuf[ERR_BUF_SIZE];
 extern char* last_assert;
 
 extern ztest_unit zvec_tests;
-extern unsigned zseed;
+extern unsigned int zseed;
 
 int zrand_int(int, int);
 int feels_good_man();

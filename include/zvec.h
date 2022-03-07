@@ -54,9 +54,10 @@ struct zvec_header {
   } while (0)
 
 #define __zvec_alloc_end(this)  \
-  ((__zvec_alloc_type(this))(((zvec_h*)this)->alloc_end))
-#define __zvec_capacity(this)   \
-  (__zvec_alloc_end(this) - __zvec_begin(this))
+  (((zvec_h*)this)->alloc_end)
+#define __zvec_capacity(this)                           \
+  ((__zvec_alloc_type(this))__zvec_alloc_end(this)      \
+    - (__zvec_alloc_type(this))__zvec_begin(this))
 #define zvec_capacity(this)     \
   (this ? __zvec_capacity(this) : (size_t)0)
 
