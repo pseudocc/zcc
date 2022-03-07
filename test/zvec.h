@@ -52,20 +52,9 @@ int pop_back();
 int swap();
 
 /**
- * declare UT
+ * define UT entry
 **/
 
-ztest_case __zvec_test_cases[] = {
-  { "BE HAPPY EVERYDAY", &feels_good_man },
-  { "CONSTRUCTOR", &ctor },
-  { "DESTRUCTOR", &dtor },
-  { "EMPTY", &empty },
-  { "SIZE", &size },
-  { "RESERVE", &reserve },
-  { "CAPACITY", &capacity },
-  { "SHRINK TO FIT", &shrink_to_fit }
-};
-
-ztest_unit zvec_tests = DECL_UT(__zvec_test_cases, ZVEC_UTNAME);
+extern ztest_unit zvec_tests;
 
 #endif
