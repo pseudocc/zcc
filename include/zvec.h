@@ -88,7 +88,7 @@ struct zvec_header {
   (this ? (__zvec_alloc_type(this)) __zvec_begin(this) : NULL)
 
 #define __zvec_end(this)        \
-  ((zvec_h*)(this))->end
+  (((zvec_h*)(this))->end)
 #define zvec_end(this)          \
   (this ? (__zvec_alloc_type(this)) __zvec_end(this) : NULL)
 
@@ -97,13 +97,13 @@ struct zvec_header {
 **/
 
 #define zvec_at(this, i)        \
-  ((*this)[i])
+  (*this)[i]
 
 #define zvec_front(this)        \
   zvec_at(this, 0)
 
 #define zvec_back(this)         \
-  (*(___zvec_alloc_type(this) _zvec_end(this) - 1))
+  ((__zvec_alloc_type(this)) __zvec_end(this))[-1]
 
 #define zvec_data(this)         \
   zvec_begin(this)

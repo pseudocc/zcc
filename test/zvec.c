@@ -10,7 +10,11 @@ static ztest_case cases[] = {
   { "CAPACITY", &capacity },
   { "SHRINK TO FIT", &shrink_to_fit },
   { "BEGIN ITERATOR", &begin },
-  { "END ITERATOR", &end }
+  { "END ITERATOR", &end },
+  { "ELEMENT AT", &at },
+  { "FIRST ELEMENT", &front },
+  { "LAST ELEMENT", &back },
+  { "DATA", &data }
 };
 
 ztest_unit zvec_tests = DECL_UT(cases, ZVEC_UTNAME);
