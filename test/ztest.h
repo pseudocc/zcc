@@ -46,7 +46,7 @@ typedef struct {
 } ztest_unit;
 
 #ifndef ARRAY_SIZE
-#define ARRAY_SIZE(arr) sizeof(arr)/sizeof(arr[0])
+#define ARRAY_SIZE(arr) (sizeof(arr)/sizeof(arr[0]))
 #endif
 
 #define DECL_UT(cases, name) { name, cases, ARRAY_SIZE(cases) }
