@@ -3,6 +3,11 @@
 
 #include <assert.h>
 
+#define ztor(p, ...)                    \
+  do {                                  \
+    *p = (typeof (*p)) { __VA_ARGS__ }; \
+  } while (0)
+
 #define ztype_n_bytes(start, end)       \
   ((void*)(end) - (void*)(start))
 

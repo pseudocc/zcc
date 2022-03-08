@@ -14,7 +14,14 @@ static ztest_case cases[] = {
   { "ELEMENT AT", &at },
   { "FIRST ELEMENT", &front },
   { "LAST ELEMENT", &back },
-  { "DATA", &data }
+  { "DATA", &data },
+  { "CLEAR", &clear },
+  { "INSERT", &insert },
+  { "EMPLACE", &emplace },
+  { "ERASE", &erase },
+  { "PUSH BACK", &push_back },
+  { "POP BACK", &pop_back },
+  { "SWAP", &swap }
 };
 
 ztest_unit zvec_tests = DECL_UT(cases, ZVEC_UTNAME);

@@ -117,7 +117,7 @@ struct zvec_header {
     size_t used = ztype_n_bytes(                \
       __zvec_begin(this), __zvec_end(this));    \
     __zvec_end(this) = __zvec_begin(this);      \
-    __zvec_shrink((zvec_h*)this, bytes >> 2);   \
+    __zvec_shrink((zvec_h*)this, used >> 2);    \
   } while (0)
 
 #define zvec_insert(this, it, v)                \
@@ -148,28 +148,29 @@ struct zvec_header {
     __zvec_alloc_type(this) p;                  \
     p = __zvec_emplace((zvec_h*)this,           \
       it, sizeof(*(it)));                       \
-    if (ctor && p)                              \
-      ctor(p, __VA_ARGS__);                     \
+    if (p) ctor(p, __VA_ARGS__);                \
     p;                                          \
   })
 
-#define zvec_erase(this, it)                    \
-  ({                                            \
-    void* next = NULL;                          \
-    if ((it) < __zvec_end(this)) {              \
-      void* new_end = --__zvec_end(this);       \
-      next = (it) + 1;                          \
-      memmove(it, next, new_end - next);        \
-    }                                           \
-    next;                                       \
+#define zvec_erase(this, it)                            \
+  ({                                                    \
+    void* next = NULL;                                  \
+    void* vit = it;                                     \
+    if (vit != NULL && vit < __zvec_end(this)           \
+        && vit >= __zvec_begin(this)) {                 \
+      __zvec_end(this) -= sizeof(*it);                  \
+      next = (vit) + 1;                                 \
+      memmove(vit, next, __zvec_end(this) - next);      \
+    }                                                   \
+    next;                                               \
   })
 
 #define zvec_erase_range(this, first, last)             \
   ({                                                    \
     void* next = NULL;                                  \
     if ((first) < (last)                                \
-        && (last) < __zvec_end(this)                    \
-        && __zvec_begin(this) <= (first)) {             \
+        && (void*)(last) < __zvec_end(this)             \
+        && __zvec_begin(this) <= (void*)(first)) {      \
       __zvec_end(this) -= ztype_n_bytes(first, last);   \
       next = last;                                      \
       memmove(first, last, __zvec_end(this) - next);    \
@@ -185,8 +186,9 @@ struct zvec_header {
     *it = v;                            \
   } while (0)
 
-#define zvec_emplace_back(this, ctor, ...)      \
-  zvec_emplace(this, __zvec_end(this),          \
+#define zvec_emplace_back(this, ctor, ...)              \
+  zvec_emplace(this,                                    \
+    (__zvec_alloc_type(this))__zvec_end(this),          \
     ctor, __VA_ARGS__)
 
 #define zvec_pop_back(this)             \
