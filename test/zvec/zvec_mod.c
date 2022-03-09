@@ -27,7 +27,7 @@ int insert() {
   zvec_insert_range(vec, zvec_begin(vec),
     (int*)nums, nums + ARRAY_SIZE(nums));
 
-  for (i = 0; i < zvec_size(vec); i++)
+  for (i = 0; i < zvec_size(vec); ++i)
     zassert_eq(zvec_at(vec, i), nums[i % ARRAY_SIZE(nums)],
       "vec[%d]", "%d", i);
 
