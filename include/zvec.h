@@ -158,9 +158,9 @@ struct zvec_header {
     void* vit = it;                                     \
     if (vit != NULL && vit < __zvec_end(this)           \
         && vit >= __zvec_begin(this)) {                 \
-      __zvec_end(this) -= sizeof(*it);                  \
-      next = (vit) + 1;                                 \
+      next = (vit) + sizeof(*it);                       \
       memmove(vit, next, __zvec_end(this) - next);      \
+      __zvec_end(this) -= sizeof(*it);                  \
     }                                                   \
     next;                                               \
   })
@@ -171,9 +171,9 @@ struct zvec_header {
     if ((first) < (last)                                \
         && (void*)(last) < __zvec_end(this)             \
         && __zvec_begin(this) <= (void*)(first)) {      \
-      __zvec_end(this) -= ztype_n_bytes(first, last);   \
       next = last;                                      \
       memmove(first, last, __zvec_end(this) - next);    \
+      __zvec_end(this) -= ztype_n_bytes(first, last);   \
     }                                                   \
     next;                                               \
   })
