@@ -20,15 +20,18 @@ enum {
 #define STRINGIZE(x) STRINGIZE_DETAIL(x)
 
 #define ERR_INDENT "\t\t"
+#define zprintf(buf, fmt, ...) \
+  sprintf(buf, fmt __VA_OPT__(,) __VA_ARGS__)
 #define zerror(fmt, ...) \
-  sprintf(zerrbuf, ERR_INDENT fmt "\n" __VA_OPT__(,) __VA_ARGS__)
+  zprintf(zerrbuf, ERR_INDENT fmt "\n" __VA_OPT__(,) __VA_ARGS__)
 #define zthrow(fmt, ...) \
   zerror(BLUE __FILE__ ":" STRINGIZE(__LINE__) RESET "\t" \
     fmt __VA_OPT__(,) __VA_ARGS__); \
   return ZTEST_FAILURE
 #define zassert(cond, fmt, ...) \
   if (!(cond)) { zthrow(fmt __VA_OPT__(,) __VA_ARGS__); } \
-  else last_assert = BLUE __FILE__ ":" STRINGIZE(__LINE__) RESET;
+  else zprintf(zastbuf, BLUE __FILE__ ":" STRINGIZE(__LINE__) \
+    RESET "\t"  fmt __VA_OPT__(,) __VA_ARGS__);
 #define zassert_eq(actual, expected, desc, fmt, ...) \
   zassert(actual == expected, desc ": expected " fmt " but got " \
   fmt " instead" __VA_OPT__(,) __VA_ARGS__, expected, actual)
@@ -53,7 +56,7 @@ typedef struct {
 
 #define ERR_BUF_SIZE 1024
 extern char zerrbuf[ERR_BUF_SIZE];
-extern char* last_assert;
+extern char zastbuf[ERR_BUF_SIZE];
 
 extern ztest_unit zvec_tests;
 extern unsigned int zseed;
