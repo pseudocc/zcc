@@ -25,6 +25,20 @@ int size() {
   return ZTEST_SUCCESS;
 }
 
+int resize() {
+  int size;
+  zvec_t(int) vec = zvec_new(int);
+  
+  zvec_resize(vec, size = 10);
+  zassert_eq((int)zvec_size(vec), size, "empty increase", "%d");
+  
+  zvec_resize(vec, size = 7);
+  zassert_eq((int)zvec_size(vec), size, "decrease", "%d");
+
+  zvec_free(vec);
+  return ZTEST_SUCCESS;
+}
+
 int reserve() {
   int cap;
   zvec_t(int) vec = zvec_new(int);

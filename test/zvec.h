@@ -19,6 +19,7 @@ int dtor();
 
 int empty();
 int size();
+int resize();
 int reserve();
 int capacity();
 int shrink_to_fit();
