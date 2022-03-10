@@ -1,6 +1,5 @@
 #include "./zvec.h"
 
-#define ALLOC_ALIGN_BYTES 4
 void* __zvec_emplace(zvec_h* this, void* it, size_t bytes) {
   size_t allocated = ztype_n_bytes(this->begin, this->alloc_end);
   size_t used = ztype_n_bytes(this->begin, this->end);
@@ -9,8 +8,7 @@ void* __zvec_emplace(zvec_h* this, void* it, size_t bytes) {
 
   if (allocated < needed) {
     do
-      allocated += allocated > (ALLOC_ALIGN_BYTES << 1)
-        ? ((allocated >> 3) << 2) : ALLOC_ALIGN_BYTES;
+      allocated += allocated > 2 ? (allocated >> 1) : 1;
     while (allocated < needed);
     __zvec_grow(this, allocated);
   }

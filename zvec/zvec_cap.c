@@ -1,7 +1,13 @@
 #include "./zvec.h"
 
+#define ALLOC_ALIGN_BYTES 4
 void __zvec_grow(zvec_h* this, size_t bytes) {
+  size_t remain = remain % ALLOC_ALIGN_BYTES;
   size_t used = ztype_n_bytes(this->begin, this->end);
+
+  if (remain)
+    bytes += ALLOC_ALIGN_BYTES - remain;
+
   this->begin = realloc(this->begin, bytes);
   this->end = this->begin + used;
   this->alloc_end = this->begin + bytes;
