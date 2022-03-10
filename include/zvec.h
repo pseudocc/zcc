@@ -44,14 +44,8 @@ struct zvec_header {
 
 #define zvec_resize(this, n)                            \
   do {                                                  \
-    void* curr_end;                                     \
-    size_t size = __zvec_size(this);                    \
-    if ((n) > size) {                                   \
-      __zvec_grow((zvec_h*)this, (n) * sizeof(this[0]));\
-      curr_end = __zvec_end(begin) + size;              \
-      memset(curr_end, 0, ztype_n_bytes(                \
-        curr_end, __zvec_end(this)));                   \
-    }                                                   \
+    size_t bytes = (n) * sizeof(**this);                \
+    __zvec_resize((zvec_h*)this, bytes);                \
   } while (0)
 
 #define __zvec_alloc_end(this)  \
@@ -206,6 +200,7 @@ zvec_h* __zvec_new(void);
 void __zvec_free(zvec_h*);
 void __zvec_grow(zvec_h*, size_t);
 void __zvec_shrink(zvec_h*, size_t);
+void __zvec_resize(zvec_h*, size_t);
 void* __zvec_emplace(zvec_h*, void*, size_t);
 void __zvec_swap(zvec_h*, zvec_h*);
 
