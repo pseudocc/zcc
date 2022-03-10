@@ -13,187 +13,188 @@ struct zvec_header {
   void* alloc_end;
 };
 
+/**
+ * internal aliases
+**/
+
+#define __atb3x(v) typeof(*v)
+#define __dtpI5(v) typeof(**v)
+#define __lbqF6(v) (((zvec_h*)(v))->begin)
+#define __dphPM(v) (((zvec_h*)(v))->end)
+#define __ubbPJ(v) (((zvec_h*)(v))->alloc_end)
+#define __szd77(v) N_ELEMS(__atb3x(v), __lbqF6(v), __dphPM(v))
+#define __cpqnp(v) N_ELEMS(__atb3x(v), __lbqF6(v), __ubbPJ(v))
+#define __essiA(v) sizeof(**v)
+
+/**
+ * generic types
+**/
+
 #define zvec_t(ty) ty**
 #define zvec_it(ty) ty*
-
-#define __zvec_alloc_type(this) \
-  typeof (*this)
-
-#define __zvec_value_type(this) \
-  typeof (**this)
 
 /**
  * constructor and destructor
 **/
 
-#define zvec_new(ty)    \
-  ((zvec_t(ty)) __zvec_new())
+#define zvec_new(ty) ((zvec_t(ty)) __zvec_new())
 
-#define zvec_free(this) \
-  __zvec_free((zvec_h*)this)
-
-/**
- * capacity
-**/
-
-#define __zvec_size(this)                               \
-  ((__zvec_alloc_type(this))__zvec_end(this)            \
-    - (__zvec_alloc_type(this))__zvec_begin(this))
-#define zvec_size(this)         \
-  (this ? __zvec_size(this) : (size_t)0)
-
-#define zvec_resize(this, n)                            \
-  do {                                                  \
-    size_t bytes = (n) * sizeof(**this);                \
-    __zvec_resize((zvec_h*)this, bytes);                \
-  } while (0)
-
-#define __zvec_alloc_end(this)  \
-  (((zvec_h*)this)->alloc_end)
-#define __zvec_capacity(this)                           \
-  ((__zvec_alloc_type(this))__zvec_alloc_end(this)      \
-    - (__zvec_alloc_type(this))__zvec_begin(this))
-#define zvec_capacity(this)     \
-  (this ? __zvec_capacity(this) : (size_t)0)
-
-#define zvec_empty(this)        \
-  (zvec_begin(this) == zvec_end(this))
-
-#define zvec_reserve(this, n)                           \
-  do {                                                  \
-    if ((n) > zvec_capacity(this))                      \
-      __zvec_grow((zvec_h*)this, (n) * sizeof(**this)); \
-  } while (0)
-
-#define zvec_shrink_to_fit(this)                        \
-  do {                                                  \
-    size_t bytes = ztype_n_bytes(                       \
-      __zvec_begin(this), __zvec_end(this));            \
-    __zvec_shrink((zvec_h*)this, bytes);                \
-  } while (0)
+#define zvec_free(v) __zvec_free((zvec_h*)(v))
 
 /**
  * iterators
 **/
 
-#define __zvec_begin(this)      \
-  (((zvec_h*)(this))->begin)
-#define zvec_begin(this)        \
-  (this ? (__zvec_alloc_type(this)) __zvec_begin(this) : NULL)
+#define zvec_begin(v) (v ? (__atb3x(v)) __lbqF6(v) : NULL)
 
-#define __zvec_end(this)        \
-  (((zvec_h*)(this))->end)
-#define zvec_end(this)          \
-  (this ? (__zvec_alloc_type(this)) __zvec_end(this) : NULL)
+#define zvec_end(v) (v ? (__atb3x(v)) __dphPM(v) : NULL)
 
 /**
- * element access
+ * capacity
 **/
 
-#define zvec_at(this, i)        \
-  (*this)[i]
+#define zvec_size(v) (v ? __szd77(v) : (size_t)0)
 
-#define zvec_front(this)        \
-  zvec_at(this, 0)
+#define zvec_resize(v, n)               \
+  do {                                  \
+    size_t bytes = (n) * __essiA(v);    \
+    __zvec_resize((zvec_h*)(v), bytes); \
+  } while (0)
 
-#define zvec_back(this)         \
-  ((__zvec_alloc_type(this)) __zvec_end(this))[-1]
+#define zvec_capacity(v) (v ? __cpqnp(v) : (size_t)0)
 
-#define zvec_data(this)         \
-  zvec_begin(this)
+#define zvec_empty(v) (zvec_begin(v) == zvec_end(v))
+
+#define zvec_reserve(v, n)                              \
+  do {                                                  \
+    size_t bytes = (n) * __essiA(v);                    \
+    size_t allocated = N_BYTES(__lbqF6(v), __ubbPJ(v)); \
+    if (bytes > allocated)                              \
+      __zvec_grow((zvec_h*)(v), bytes);                 \
+  } while (0)
+
+#define zvec_shrink_to_fit(v)                           \
+  do {                                                  \
+    size_t used = N_BYTES(__lbqF6(v), __dphPM(v));      \
+    __zvec_shrink((zvec_h*)(v), used);                  \
+  } while (0)
+
+/**
+ * ele(zvec_h*)(v)nt access
+**/
+
+#define zvec_at(v, i)   \
+  (*v)[i]
+
+#define zvec_front(v)   \
+  zvec_at(v, 0)
+
+#define zvec_back(v)    \
+  ((__atb3x(v)) __dphPM(v))[-1]
+
+#define zvec_data(v)    \
+  zvec_begin(v)
 
 /**
  * modifiers
 **/
 
-#define zvec_clear(this)                        \
+#define zvec_clear(v)                           \
   do {                                          \
-    size_t used = ztype_n_bytes(                \
-      __zvec_begin(this), __zvec_end(this));    \
-    __zvec_end(this) = __zvec_begin(this);      \
-    __zvec_shrink((zvec_h*)this, used >> 2);    \
+    size_t used = N_BYTES(                      \
+      __lbqF6(v), __dphPM(v));                  \
+    __dphPM(v) = __lbqF6(v);                    \
+    __zvec_shrink((zvec_h*)(v), used >> 2);     \
   } while (0)
 
-#define zvec_insert(this, it, v)                \
-  ({                                            \
-    ztype_ok(it, __zvec_alloc_type(this));      \
-    __zvec_alloc_type(this) p;                  \
-    p = __zvec_emplace((zvec_h*)this,           \
-      it, sizeof(*(it)));                       \
-    if (p) *p = v;                              \
-    p;                                          \
-  })
-
-#define zvec_insert_range(this, it, first, last)        \
+#define zvec_insert(v, it, d)                           \
   ({                                                    \
-    ztype_ok(it, __zvec_alloc_type(this));              \
-    ztype_ok(first, __zvec_alloc_type(this));           \
-    ztype_ok(last, __zvec_alloc_type(this));            \
-    __zvec_alloc_type(this) p;                          \
-    size_t bytes = ztype_n_bytes(first, last);          \
-    p = __zvec_emplace((zvec_h*)this, it, bytes);       \
-    if (p) memcpy(p, first, bytes);                     \
+    __auto_type _it = it;                               \
+    IS_TYPE(_it, __atb3x(v));                           \
+    __atb3x(v) p;                                       \
+    p = __zvec_emplace((zvec_h*)(v), _it, __essiA(v));  \
+    if (p) *p = d;                                      \
     p;                                                  \
   })
 
-#define zvec_emplace(this, it, ctor, ...)       \
+#define zvec_insert_range(v, it, lb, ub)        \
   ({                                            \
-    ztype_ok(it, __zvec_alloc_type(this));      \
-    __zvec_alloc_type(this) p;                  \
-    p = __zvec_emplace((zvec_h*)this,           \
-      it, sizeof(*(it)));                       \
-    if (p) ctor(p, __VA_ARGS__);                \
+    __auto_type _it = it;                       \
+    __auto_type _lb = lb;                       \
+    __auto_type _ub = ub;                       \
+    IS_TYPE(_it, __atb3x(v));                   \
+    IS_TYPE(_lb, __atb3x(v));                   \
+    IS_TYPE(_ub, __atb3x(v));                   \
+    __atb3x(v) p;                               \
+    size_t bytes = N_BYTES(_lb, _ub);           \
+    p = __zvec_emplace((zvec_h*)(v), it, bytes);\
+    if (p) memcpy(p, lb, bytes);                \
     p;                                          \
   })
 
-#define zvec_erase(this, it)                            \
+#define zvec_emplace(v, it, ctor, ...)  \
+  ({                                    \
+    __auto_type _it = it;               \
+    IS_TYPE(_it, __atb3x(v));           \
+    __atb3x(v) p;                       \
+    p = __zvec_emplace((zvec_h*)(v),    \
+      _it, __essiA(v));                 \
+    if (p) ctor(p, __VA_ARGS__);        \
+    p;                                  \
+  })
+
+#define zvec_erase(v, it)                               \
   ({                                                    \
+    __auto_type _it = it;                               \
+    IS_TYPE(_it, __atb3x(v));                           \
     void* next = NULL;                                  \
-    void* vit = it;                                     \
-    if (vit != NULL && vit < __zvec_end(this)           \
-        && vit >= __zvec_begin(this)) {                 \
-      next = (vit) + sizeof(*it);                       \
-      memmove(vit, next, __zvec_end(this) - next);      \
-      __zvec_end(this) -= sizeof(*it);                  \
+    void* vit = _it;                                    \
+    if (vit != NULL && vit < __dphPM(v)                 \
+        && vit >= __lbqF6(v)) {                         \
+      next = vit + __essiA(v);                          \
+      memmove(vit, next, N_BYTES(next, __dphPM(v)));    \
+      __dphPM(v) -= __essiA(v);                         \
     }                                                   \
     next;                                               \
   })
 
-#define zvec_erase_range(this, first, last)             \
+#define zvec_erase_range(v, lb, ub)                     \
   ({                                                    \
+    __auto_type _lb = lb;                               \
+    __auto_type _ub = ub;                               \
+    IS_TYPE(_lb, __atb3x(v));                           \
+    IS_TYPE(_ub, __atb3x(v));                           \
     void* next = NULL;                                  \
-    if ((first) < (last)                                \
-        && (void*)(last) < __zvec_end(this)             \
-        && __zvec_begin(this) <= (void*)(first)) {      \
-      next = last;                                      \
-      memmove(first, last, __zvec_end(this) - next);    \
-      __zvec_end(this) -= ztype_n_bytes(first, last);   \
+    if (_lb < _ub                                       \
+        && (void*)(_ub) < __dphPM(v)                    \
+        && __lbqF6(v) <= (void*)(_lb)) {                \
+      next = _ub;                                       \
+      memmove(_lb, _ub, N_BYTES(next, __dphPM(v)));     \
+      __dphPM(v) -= N_BYTES(lb, ub);                    \
     }                                                   \
     next;                                               \
   })
 
-#define zvec_push_back(this, v)         \
+#define zvec_push_back(v, d)            \
   do {                                  \
-    __zvec_alloc_type(this) it;         \
-    it = __zvec_emplace((zvec_h*)this,  \
-      __zvec_end(this), sizeof(*it));   \
-    *it = v;                            \
+    __atb3x(v) it;                      \
+    it = __zvec_emplace((zvec_h*)(v),   \
+      __dphPM(v), __essiA(v));          \
+    *it = d;                            \
   } while (0)
 
-#define zvec_emplace_back(this, ctor, ...)              \
-  zvec_emplace(this,                                    \
-    (__zvec_alloc_type(this))__zvec_end(this),          \
-    ctor, __VA_ARGS__)
+#define zvec_emplace_back(v, ctor, ...) \
+  zvec_emplace(v, (__atb3x(v))__dphPM(v), ctor, __VA_ARGS__)
 
-#define zvec_pop_back(this)             \
-  do {                                  \
-    __zvec_end(this) -= sizeof(**this); \
+#define zvec_pop_back(v)        \
+  do {                          \
+    __dphPM(v) -= __essiA(v);   \
   } while (0)
 
-#define zvec_swap(this, other)                  \
+#define zvec_swap(v1, v2)                       \
   do {                                          \
-    ztype_ok(other, typeof (this));             \
-    __zvec_swap((zvec_h*)this, (zvec_h*)other); \
+    IS_TYPE(v2, typeof(v1));                    \
+    __zvec_swap((zvec_h*)(v1), (zvec_h*)(v2));  \
   } while (0)
 
 zvec_h* __zvec_new(void);

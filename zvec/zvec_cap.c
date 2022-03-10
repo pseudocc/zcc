@@ -9,7 +9,7 @@ static inline size_t ensure_aligned(size_t bytes) {
 }
 
 void __zvec_grow(zvec_h* this, size_t bytes) {
-  size_t used = ztype_n_bytes(this->begin, this->end);
+  size_t used = N_BYTES(this->begin, this->end);
   
   bytes = ensure_aligned(bytes);
   this->begin = realloc(this->begin, bytes);
@@ -27,7 +27,7 @@ void __zvec_shrink(zvec_h* this, size_t bytes) {
 }
 
 void __zvec_resize(zvec_h* this, size_t bytes) {
-  size_t used = ztype_n_bytes(this->begin, this->end);
+  size_t used = N_BYTES(this->begin, this->end);
   size_t diff;
   void* it;
 

@@ -1,9 +1,9 @@
 #include "./zvec.h"
 
 void* __zvec_emplace(zvec_h* this, void* it, size_t bytes) {
-  size_t allocated = ztype_n_bytes(this->begin, this->alloc_end);
-  size_t used = ztype_n_bytes(this->begin, this->end);
-  size_t it_bias = ztype_n_bytes(this->begin, it);
+  size_t allocated = N_BYTES(this->begin, this->alloc_end);
+  size_t used = N_BYTES(this->begin, this->end);
+  size_t it_bias = N_BYTES(this->begin, it);
   size_t needed = used + bytes;
 
   if (allocated < needed) {

@@ -8,13 +8,13 @@
     *p = (typeof (*p)) { __VA_ARGS__ }; \
   } while (0)
 
-#define ztype_n_bytes(start, end)       \
-  ((void*)(end) - (void*)(start))
+#define N_ELEMS(pty, lb, ub) ((pty)(ub) - (pty)(lb))
 
-#define ztype_ok(actual, expected)              \
-  static_assert(__builtin_types_compatible_p(   \
-  typeof (actual), expected),                   \
-  "expected '" #expected "' "                   \
-  "but got '" #actual "' instead.")
+#define N_BYTES(lb, ub) N_ELEMS(void*, lb, ub)
+
+#define IS_TYPE(identifier, expected)                   \
+  static_assert(__builtin_types_compatible_p(           \
+    typeof (identifier), expected),                     \
+    #identifier " is expected to be'" #expected "'")    \
 
 #endif
