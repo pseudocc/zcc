@@ -12,7 +12,7 @@ manual pages (NOT STARTED).
 
 ## VECTOR
 
-Example usage, for more, take a look at the UT cases under `test/zvec/`.
+Example usage, for more, take a look at the UT cases under [test/zvec/](https://github.com/pseudocc/zcc/tree/aloof/test/zvec).
 
 ```c
 zvec_t(int) vec = zvec_new(int);
