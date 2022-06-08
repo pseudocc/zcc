@@ -1,6 +1,6 @@
 #include "../zvec.h"
 
-int ctor() {
+int tvec_ctor() {
   zvec_t(int) vec = zvec_new(int);
   zassert(vec != NULL, "vec should not be NULL");
   
@@ -8,7 +8,7 @@ int ctor() {
   return ZTEST_SUCCESS;
 }
 
-int dtor() {
+int tvec_dtor() {
   zvec_t(int) vec0 = zvec_new(int);
   zvec_t(int) vec1 = zvec_new(int);
   zvec_t(int) vec2 = NULL;

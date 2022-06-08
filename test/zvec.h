@@ -10,47 +10,47 @@
  * constructor and destructor
 **/
 
-int ctor();
-int dtor();
+int tvec_ctor();
+int tvec_dtor();
 
 /**
- * capacity
+ * tvec_capacity
 **/
 
-int empty();
-int size();
-int resize();
-int reserve();
-int capacity();
-int shrink_to_fit();
+int tvec_empty();
+int tvec_size();
+int tvec_resize();
+int tvec_reserve();
+int tvec_capacity();
+int tvec_shrink_to_fit();
 
 /**
  * iterators
 **/
 
-int begin();
-int end();
+int tvec_begin();
+int tvec_end();
 
 /**
  * element access
 **/
 
-int at();
-int front();
-int back();
-int data();
+int tvec_at();
+int tvec_front();
+int tvec_back();
+int tvec_data();
 
 /**
  * modifiers
 **/
 
-int clear();
-int insert();
-int emplace();
-int erase();
-int push_back();
-int pop_back();
-int swap();
+int tvec_clear();
+int tvec_insert();
+int tvec_emplace();
+int tvec_erase();
+int tvec_push_back();
+int tvec_pop_back();
+int tvec_swap();
 
 /**
  * define UT entry

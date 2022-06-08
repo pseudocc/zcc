@@ -1,6 +1,6 @@
 #include "../zvec.h"
 
-int clear() {
+int tvec_clear() {
   zvec_t(int) vec = zvec_new(int);
   int items;
 
@@ -17,7 +17,7 @@ int clear() {
   return ZTEST_SUCCESS;
 }
 
-int insert() {
+int tvec_insert() {
   zvec_t(int) vec = zvec_new(int);
   int nums[] = { 7, 2, 9 }, i;
 
@@ -47,7 +47,7 @@ static void dt_ctor(day_time* p, int h, int m, int s) {
   p->second = s;
 }
 
-int emplace() {
+int tvec_emplace() {
   const day_time now = { 14, 18, 7 };
   zvec_t(day_time) vec = zvec_new(day_time);
   zvec_it(day_time) it;
@@ -68,7 +68,7 @@ int emplace() {
   return ZTEST_SUCCESS;
 }
 
-int erase() {
+int tvec_erase() {
   zvec_t(int) vec = zvec_new(int);
   int nums[] = { 2, 3, 5, 7, 11, 13, 17 }, i, n;
 
@@ -109,7 +109,7 @@ static void random_integers(int* p, int n) {
     *p++ = zrand_int(0, 0x7fffffff);
 }
 
-int push_back() {
+int tvec_push_back() {
   zvec_t(int) vec = zvec_new(int);
   int nums[256] = { 0 }, i, j;
   random_integers(nums, ARRAY_SIZE(nums));
@@ -126,7 +126,7 @@ int push_back() {
   return ZTEST_SUCCESS;
 }
 
-int pop_back() {
+int tvec_pop_back() {
   zvec_t(int) vec = zvec_new(int);
   int nums[256] = { 0 }, i;
   random_integers(nums, ARRAY_SIZE(nums));
@@ -146,7 +146,7 @@ int pop_back() {
   return ZTEST_SUCCESS;
 }
 
-int swap() {
+int tvec_swap() {
   const int a = 10, b = 11, c = 77;
   zvec_t(int) vec1 = zvec_new(int);
   zvec_t(int) vec2 = zvec_new(int);

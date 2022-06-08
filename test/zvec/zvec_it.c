@@ -1,6 +1,6 @@
 #include "../zvec.h"
 
-int begin() {
+int tvec_begin() {
   int value;
   zvec_t(int) vec = zvec_new(int);
 
@@ -16,7 +16,7 @@ int begin() {
   return ZTEST_SUCCESS;
 }
 
-int end() {
+int tvec_end() {
   int value, loops;
   zvec_t(int) vec = zvec_new(int);
   zvec_it(int) it;

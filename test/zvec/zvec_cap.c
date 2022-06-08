@@ -1,6 +1,6 @@
 #include "../zvec.h"
 
-int empty() {
+int tvec_empty() {
   zvec_t(int) vec = zvec_new(int);
   zassert(zvec_empty(vec), "new");
 
@@ -8,7 +8,7 @@ int empty() {
   return ZTEST_SUCCESS;
 }
 
-int size() {
+int tvec_size() {
   const int loops = 7;
   zvec_t(int) vec = zvec_new(int);
   int count, i, j;
@@ -25,7 +25,7 @@ int size() {
   return ZTEST_SUCCESS;
 }
 
-int resize() {
+int tvec_resize() {
   int size;
   zvec_t(int) vec = zvec_new(int);
   
@@ -39,7 +39,7 @@ int resize() {
   return ZTEST_SUCCESS;
 }
 
-int reserve() {
+int tvec_reserve() {
   int cap;
   zvec_t(int) vec = zvec_new(int);
 
@@ -67,7 +67,7 @@ int reserve() {
   return ZTEST_SUCCESS;
 }
 
-int capacity() {
+int tvec_capacity() {
   zvec_t(int) vec = zvec_new(int);
   zvec_h* zh = (zvec_h*)vec;
   int cap;
@@ -82,7 +82,7 @@ int capacity() {
   return ZTEST_SUCCESS;
 }
 
-int shrink_to_fit() {
+int tvec_shrink_to_fit() {
   zvec_t(int) vec = zvec_new(int);
   int items, i;
 

@@ -1,6 +1,6 @@
 #include "../zvec.h"
 
-int at() {
+int tvec_at() {
   zvec_t(int) vec = zvec_new(int);
   int value;
 
@@ -14,7 +14,7 @@ int at() {
   return ZTEST_SUCCESS;
 }
 
-int front() {
+int tvec_front() {
   zvec_t(int) vec = zvec_new(int);
   int value;
 
@@ -31,7 +31,7 @@ int front() {
   return ZTEST_SUCCESS;
 }
 
-int back() {
+int tvec_back() {
   zvec_t(int) vec = zvec_new(int);
   int value;
 
@@ -48,7 +48,7 @@ int back() {
   return ZTEST_SUCCESS;
 }
 
-int data() {
+int tvec_data() {
   zvec_t(int) vec = zvec_new(int);
 
   zassert_eq(zvec_data(vec), NULL, "new", "%p");
